@@ -12,6 +12,17 @@ Source is typically a stream created by BinaryFormatter.</Description>
     <PackageTags>BinaryFormatter serialization</PackageTags>
     <PackageReleaseNotes>Initial Release</PackageReleaseNotes>
     <Copyright>Copyright (c) Bruce Bowyer-Smyth and contributors</Copyright>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/bbowyersmyth/BinaryFormatDataStructure</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/bbowyersmyth/BinaryFormatDataStructure</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>

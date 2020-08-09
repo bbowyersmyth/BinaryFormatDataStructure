@@ -63,6 +63,34 @@ namespace BinaryFormatDataStructureTests
         }
 
         [TestMethod]
+        public void Test2DimensionalStringArray()
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            MemoryStream ms = new MemoryStream();
+
+            var array = new string[,] { { "10", "11", "12" }, { "20", "21", "22" } };
+            formatter.Serialize(ms, array);
+            ms.Position = 0;
+
+            object result = NRBFReader.ReadStream(ms);
+
+            Assert.IsInstanceOfType(result, typeof(string[,]));
+
+            string[,] arrayResult = (string[,])result;
+            Assert.AreEqual(2, arrayResult.Rank);
+            Assert.AreEqual(2, arrayResult.GetLength(0));
+            Assert.AreEqual(3, arrayResult.GetLength(1));
+            Assert.AreEqual(0, arrayResult.GetLowerBound(0));
+            Assert.AreEqual(0, arrayResult.GetLowerBound(1));
+            Assert.AreEqual("10", (string)arrayResult.GetValue(new int[] { 0, 0 }));
+            Assert.AreEqual("11", (string)arrayResult.GetValue(new int[] { 0, 1 }));
+            Assert.AreEqual("12", (string)arrayResult.GetValue(new int[] { 0, 2 }));
+            Assert.AreEqual("20", (string)arrayResult.GetValue(new int[] { 1, 0 }));
+            Assert.AreEqual("21", (string)arrayResult.GetValue(new int[] { 1, 1 }));
+            Assert.AreEqual("22", (string)arrayResult.GetValue(new int[] { 1, 2 }));
+        }
+
+        [TestMethod]
         public void TestMultiDimensionalArray()
         {
             BinaryFormatter formatter = new BinaryFormatter();
@@ -91,6 +119,36 @@ namespace BinaryFormatDataStructureTests
             Assert.AreEqual(20, (int)arrayResult.GetValue(new int[] { 0, 1, 0 }));
             Assert.AreEqual(21, (int)arrayResult.GetValue(new int[] { 0, 1, 1 }));
             Assert.AreEqual(22, (int)arrayResult.GetValue(new int[] { 0, 1, 2 }));
+        }
+
+        [TestMethod]
+        public void TestMultiDimensionalStringArray()
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            MemoryStream ms = new MemoryStream();
+
+            var array = new string[,,] { { { "10", "11", "12" }, { "20", "21", "22" } } };
+            formatter.Serialize(ms, array);
+            ms.Position = 0;
+
+            object result = NRBFReader.ReadStream(ms);
+
+            Assert.IsInstanceOfType(result, typeof(string[,,]));
+
+            string[,,] arrayResult = (string[,,])result;
+            Assert.AreEqual(3, arrayResult.Rank);
+            Assert.AreEqual(1, arrayResult.GetLength(0));
+            Assert.AreEqual(2, arrayResult.GetLength(1));
+            Assert.AreEqual(3, arrayResult.GetLength(2));
+            Assert.AreEqual(0, arrayResult.GetLowerBound(0));
+            Assert.AreEqual(0, arrayResult.GetLowerBound(1));
+            Assert.AreEqual(0, arrayResult.GetLowerBound(2));
+            Assert.AreEqual("10", (string)arrayResult.GetValue(new int[] { 0, 0, 0 }));
+            Assert.AreEqual("11", (string)arrayResult.GetValue(new int[] { 0, 0, 1 }));
+            Assert.AreEqual("12", (string)arrayResult.GetValue(new int[] { 0, 0, 2 }));
+            Assert.AreEqual("20", (string)arrayResult.GetValue(new int[] { 0, 1, 0 }));
+            Assert.AreEqual("21", (string)arrayResult.GetValue(new int[] { 0, 1, 1 }));
+            Assert.AreEqual("22", (string)arrayResult.GetValue(new int[] { 0, 1, 2 }));
         }
 
         [TestMethod]
@@ -123,6 +181,38 @@ namespace BinaryFormatDataStructureTests
             Assert.AreEqual(21, arrayResult[1][1]);
             Assert.AreEqual(22, arrayResult[1][2]);
             Assert.AreEqual(23, arrayResult[1][3]);
+        }
+
+        [TestMethod]
+        public void TestRaggedStringArray()
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            MemoryStream ms = new MemoryStream();
+
+            var array = new string[][] { new string[] { "10", "11" }, new string[] { "20", "21", "22", "23" } };
+            formatter.Serialize(ms, array);
+            ms.Position = 0;
+
+            object result = NRBFReader.ReadStream(ms);
+
+            Assert.IsInstanceOfType(result, typeof(string[][]));
+
+            string[][] arrayResult = (string[][])result;
+            Assert.AreEqual(1, arrayResult.Rank);
+            Assert.AreEqual(2, arrayResult.Length);
+            Assert.AreEqual(0, arrayResult.GetLowerBound(0));
+            Assert.AreEqual(1, arrayResult[0].Rank);
+            Assert.AreEqual(2, arrayResult[0].Length);
+            Assert.AreEqual(0, arrayResult[0].GetLowerBound(0));
+            Assert.AreEqual(1, arrayResult[1].Rank);
+            Assert.AreEqual(4, arrayResult[1].Length);
+            Assert.AreEqual(0, arrayResult[1].GetLowerBound(0));
+            Assert.AreEqual("10", arrayResult[0][0]);
+            Assert.AreEqual("11", arrayResult[0][1]);
+            Assert.AreEqual("20", arrayResult[1][0]);
+            Assert.AreEqual("21", arrayResult[1][1]);
+            Assert.AreEqual("22", arrayResult[1][2]);
+            Assert.AreEqual("23", arrayResult[1][3]);
         }
     }
 }

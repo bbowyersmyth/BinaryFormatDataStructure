@@ -35,7 +35,7 @@ namespace BinaryFormatDataStructure
             {
                 throw new SerializationException("Invalid NRBF stream");
             }
-            
+
             var header = new SerializationHeaderRecord();
             header.ReadAndValidate(_reader);
 
@@ -721,7 +721,22 @@ namespace BinaryFormatDataStructure
                     break;
 
                 case PrimitiveType.None:
-                    if (record.BinaryArrayType == BinaryArrayType.Jagged)
+                    if (record.BinaryType == BinaryType.StringArray)
+                    {
+                        arrayType = typeof(string[]);
+                    }
+                    else if (record.BinaryType == BinaryType.String)
+                    {
+                        if (record.BinaryArrayType == BinaryArrayType.Jagged)
+                        {
+                            arrayType = typeof(string[]);
+                        }
+                        else
+                        {
+                            arrayType = typeof(string);
+                        }
+                    }
+                    else if (record.BinaryArrayType == BinaryArrayType.Jagged)
                     {
                         arrayType = typeof(object[]);
                     }
