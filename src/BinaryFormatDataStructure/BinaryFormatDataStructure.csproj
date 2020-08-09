@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net452;netstandard2.0</TargetFrameworks>
+    <RootNamespace>BinaryFormatDataStructure</RootNamespace>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.0.1-alpha</Version>
+    <Authors>Bruce Bowyer-Smyth</Authors>
+    <Company></Company>
+    <Description>Reader for the Binary Format Data Structure (MS-NRBF).
+Source is typically a stream created by BinaryFormatter.</Description>
+    <PackageTags>BinaryFormatter serialization</PackageTags>
+    <PackageReleaseNotes>Initial Release</PackageReleaseNotes>
+    <Copyright>Copyright (c) Bruce Bowyer-Smyth and contributors</Copyright>
+  </PropertyGroup>
+
+</Project>
