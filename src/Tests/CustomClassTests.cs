@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Collections.Generic;
 
 namespace BinaryFormatDataStructureTests
 {
@@ -40,6 +41,27 @@ namespace BinaryFormatDataStructureTests
             Assert.AreEqual("_two", current.Key);
             Assert.IsInstanceOfType(current.Value, typeof(bool));
             Assert.AreEqual(true, (bool)current.Value);
+        }
+
+        [TestMethod]
+        public void TestReusedCustomClass()
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            MemoryStream ms = new MemoryStream();
+
+            var model = new TestModel();
+            formatter.Serialize(ms, new KeyValuePair<TestModel, TestModel>(model, model));
+            ms.Position = 0;
+
+            object result = NRBFReader.ReadStream(ms);
+
+            Assert.IsInstanceOfType(result, typeof(BinaryObject));
+
+            BinaryObject objectResult = (BinaryObject)result;
+            Assert.IsTrue(objectResult.ContainsKey("key"));
+            Assert.IsTrue(objectResult.ContainsKey("value"));
+            Assert.AreNotEqual(null, objectResult.ContainsKey("key"));
+            Assert.AreSame(objectResult["key"], objectResult["value"]);
         }
 
         [Serializable]

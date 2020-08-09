@@ -176,6 +176,7 @@ namespace BinaryFormatDataStructure
                     {
                         var result = new MemberPrimitiveTypedRecord();
                         result.Read(_reader);
+                        currentObject = result.Value;
                     }
                     break;
 
