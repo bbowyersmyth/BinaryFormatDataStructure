@@ -75,7 +75,14 @@ namespace BinaryFormatDataStructure
                             _objectTracker[result.ObjectId] = owner;
                         }
                         currentObject = owner;
-                        ReadMembers(owner, classRef.ClassInfo.MemberNames, classRef.MemberTypeInfo);
+                        if (classRef.MemberTypeInfo == null)
+                        {
+                            ReadUntypedMembers(owner, owner.TypeName, classRef.ClassInfo.MemberNames);
+                        }
+                        else
+                        {
+                            ReadMembers(owner, classRef.ClassInfo.MemberNames, classRef.MemberTypeInfo);
+                        }
                     }
                     break;
 
@@ -92,7 +99,7 @@ namespace BinaryFormatDataStructure
                             _objectTracker[result.ClassInfo.ObjectId] = result;
                         }
                         currentObject = result.Value;
-                        ReadMembers(result.Value, result.ClassInfo.MemberNames, null);
+                        ReadUntypedMembers(result.Value, result.ClassInfo.Name, result.ClassInfo.MemberNames);
                     }
                     break;
 
@@ -109,7 +116,7 @@ namespace BinaryFormatDataStructure
                             _objectTracker[result.ClassInfo.ObjectId] = result;
                         }
                         currentObject = result.Value;
-                        ReadMembers(result.Value, result.ClassInfo.MemberNames, null);
+                        ReadUntypedMembers(result.Value, result.ClassInfo.Name, result.ClassInfo.MemberNames);
                     }
                     break;
 
@@ -288,7 +295,7 @@ namespace BinaryFormatDataStructure
         {
             for (int i = 0; i < memberNames.Length; i++)
             {
-                if (memberTypeInfo != null && memberTypeInfo.BinaryType[i] == BinaryType.Primitive)
+                if (memberTypeInfo.BinaryType[i] == BinaryType.Primitive)
                 {
                     owner.AddMember(memberNames[i], PrimitiveReader.Read((PrimitiveType)memberTypeInfo.AdditionalInfos[i], _reader));
                 }
@@ -310,6 +317,36 @@ namespace BinaryFormatDataStructure
                     }
                 }
             }
+        }
+
+        private void ReadUntypedMembers(BinaryObject owner, string className, string[] memberNames)
+        {
+            if (className == "System.Guid" && memberNames.Length == 11)
+            {
+                owner.AddMember("_a", _reader.ReadInt32());
+                owner.AddMember("_b", _reader.ReadInt16());
+                owner.AddMember("_c", _reader.ReadInt16());
+                owner.AddMember("_d", _reader.ReadByte());
+                owner.AddMember("_e", _reader.ReadByte());
+                owner.AddMember("_f", _reader.ReadByte());
+                owner.AddMember("_g", _reader.ReadByte());
+                owner.AddMember("_h", _reader.ReadByte());
+                owner.AddMember("_i", _reader.ReadByte());
+                owner.AddMember("_j", _reader.ReadByte());
+                owner.AddMember("_k", _reader.ReadByte());
+                return;
+            }
+            else if (memberNames.Length == 1)
+            {
+                if (memberNames[0] == "value__")
+                {
+                    // Likely an enum but we don't know the size. Take a chance at the default int
+                    owner.AddMember(memberNames[0], _reader.ReadInt32());
+                    return;
+                }
+            }
+
+            throw new SerializationException("Unsupported untyped member");
         }
 
         private object ReadArray(ArraySinglePrimitiveRecord record)
