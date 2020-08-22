@@ -109,7 +109,8 @@ namespace BinaryFormatDataStructure
                         result.Read(_reader);
                         result.Value = new BinaryObject()
                         {
-                            TypeName = result.ClassInfo.Name
+                            TypeName = result.ClassInfo.Name,
+                            AssemblyName = _libraries[result.LibraryId]
                         };
                         if (result.ClassInfo.ObjectId != 0)
                         {
@@ -346,7 +347,7 @@ namespace BinaryFormatDataStructure
                 }
             }
 
-            throw new SerializationException("Unsupported untyped member");
+            throw new SerializationException("Unsupported untyped member: " + className);
         }
 
         private object ReadArray(ArraySinglePrimitiveRecord record)

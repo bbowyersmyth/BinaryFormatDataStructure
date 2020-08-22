@@ -64,6 +64,29 @@ namespace BinaryFormatDataStructureTests
             Assert.AreSame(objectResult["key"], objectResult["value"]);
         }
 
+        [TestMethod]
+        public void TestCustomEnumTypesWhenNeeded()
+        {
+            TestEnum expected = TestEnum.Two;
+            BinaryFormatter formatter = new BinaryFormatter();
+            formatter.TypeFormat = System.Runtime.Serialization.Formatters.FormatterTypeStyle.TypesWhenNeeded;
+            MemoryStream ms = new MemoryStream();
+
+            formatter.Serialize(ms, expected);
+            ms.Position = 0;
+
+            object result = NRBFReader.ReadStream(ms);
+
+            Assert.IsInstanceOfType(result, typeof(BinaryObject));
+
+            BinaryObject objectResult = (BinaryObject)result;
+            Assert.AreEqual("Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", objectResult.AssemblyName);
+            Assert.AreEqual("BinaryFormatDataStructureTests.CustomClassTests+TestEnum", objectResult.TypeName);
+            Assert.AreEqual(1, objectResult.Keys.Count());
+
+            Assert.AreEqual(2, (int)objectResult["value__"]);
+        }
+
         [Serializable]
         private class TestModel
         {
@@ -76,6 +99,12 @@ namespace BinaryFormatDataStructureTests
 #pragma warning restore IDE0044 // Add readonly modifier
 
             public decimal Three { get { return 0; } set { } }
+        }
+
+        private enum TestEnum
+        {
+            One = 1,
+            Two = 2
         }
     }
 }

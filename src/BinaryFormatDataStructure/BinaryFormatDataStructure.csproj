@@ -4,7 +4,7 @@
     <TargetFrameworks>net452;netstandard2.0</TargetFrameworks>
     <RootNamespace>BinaryFormatDataStructure</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.0.1-alpha</Version>
+    <Version>1.0.0</Version>
     <Authors>Bruce Bowyer-Smyth</Authors>
     <Company></Company>
     <Description>Reader for the Binary Format Data Structure (MS-NRBF).
@@ -16,6 +16,8 @@ Source is typically a stream created by BinaryFormatter.</Description>
     <PackageProjectUrl>https://github.com/bbowyersmyth/BinaryFormatDataStructure</PackageProjectUrl>
     <RepositoryUrl>https://github.com/bbowyersmyth/BinaryFormatDataStructure</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
