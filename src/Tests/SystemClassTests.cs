@@ -90,7 +90,7 @@ namespace BinaryFormatDataStructureTests
         [TestMethod]
         public void TestSystemEnumTypesWhenNeeded()
         {
-            System.Runtime.Serialization.Formatters.FormatterTypeStyle expected = System.Runtime.Serialization.Formatters.FormatterTypeStyle.TypesAlways;
+            StringComparison expected = StringComparison.Ordinal;
             BinaryFormatter formatter = new BinaryFormatter();
             formatter.TypeFormat = System.Runtime.Serialization.Formatters.FormatterTypeStyle.TypesWhenNeeded;
             MemoryStream ms = new MemoryStream();
@@ -104,10 +104,10 @@ namespace BinaryFormatDataStructureTests
 
             BinaryObject objectResult = (BinaryObject)result;
             Assert.IsNull(objectResult.AssemblyName);
-            Assert.AreEqual("System.Runtime.Serialization.Formatters.FormatterTypeStyle", objectResult.TypeName);
+            Assert.AreEqual("System.StringComparison", objectResult.TypeName);
             Assert.AreEqual(1, objectResult.Keys.Count());
 
-            Assert.AreEqual(1, (int)objectResult["value__"]);
+            Assert.AreEqual(4, (int)objectResult["value__"]);
         }
     }
 }
