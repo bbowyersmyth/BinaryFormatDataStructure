@@ -52,8 +52,13 @@ namespace BinaryFormatDataStructure
 
         private object Read()
         {
+            return Read(out _);
+        }
+
+        private object Read(out RecordType recordType)
+        {
             object currentObject = null;
-            RecordType recordType = (RecordType)_reader.ReadByte();
+            recordType = (RecordType)_reader.ReadByte();
 
             switch (recordType)
             {
@@ -566,7 +571,14 @@ namespace BinaryFormatDataStructure
 
             for (int i = 0; i < result.Length; i++)
             {
-                object value = Read();
+                object value = Read(out var recordType);
+                if (recordType == RecordType.BinaryLibrary)
+                {
+                    // According to [MS-NRBF] section 2.7, ArraySingleObject element member references can be preceded
+                    // by exactly zero or one BinaryLibrary records, so if we just read a BinaryLibrary record, we should
+                    // skip it and read the following record.
+                    value = Read();
+                }
 
                 if (value is ObjectNullMultipleRecord nullMultiple)
                 {
@@ -842,7 +854,14 @@ namespace BinaryFormatDataStructure
                             continue;
                         }
 
-                        object value = Read();
+                        object value = Read(out var recordType);
+                        if (recordType == RecordType.BinaryLibrary)
+                        {
+                            // According to [MS-NRBF] section 2.7, BinaryArray element member references can be preceded
+                            // by exactly zero or one BinaryLibrary records, so if we just read a BinaryLibrary record, we should
+                            // skip it and read the following record.
+                            value = Read();
+                        }
 
                         if (value is ObjectNullMultipleRecord nullMultiple)
                         {
