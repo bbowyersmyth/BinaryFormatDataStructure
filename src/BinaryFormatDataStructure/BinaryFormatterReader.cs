@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -509,7 +510,7 @@ namespace BinaryFormatDataStructure
 
                         for (int i = 0; i < result.Length; i++)
                         {
-                            result[i] = _reader.ReadDecimal();
+                            result[i] = decimal.Parse(_reader.ReadString(), CultureInfo.InvariantCulture);
                         }
 
                         return result;

@@ -27,7 +27,7 @@ namespace BinaryFormatDataStructureTests
             BinaryObject objectResult = (BinaryObject)result;
             Assert.AreEqual("Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", objectResult.AssemblyName);
             Assert.AreEqual("BinaryFormatDataStructureTests.CustomClassTests+TestModel", objectResult.TypeName);
-            Assert.AreEqual(2, objectResult.Keys.Count());
+            Assert.AreEqual(3, objectResult.Keys.Count());
 
             var enumer = objectResult.GetEnumerator();
             enumer.MoveNext();
@@ -41,6 +41,12 @@ namespace BinaryFormatDataStructureTests
             Assert.AreEqual("_two", current.Key);
             Assert.IsInstanceOfType(current.Value, typeof(bool));
             Assert.AreEqual(true, (bool)current.Value);
+
+            enumer.MoveNext();
+            current = enumer.Current;
+            Assert.AreEqual("_three", current.Key);
+            Assert.IsInstanceOfType(current.Value, typeof(decimal));
+            Assert.AreEqual(decimal.MaxValue, (decimal)current.Value);
         }
 
         [TestMethod]
@@ -99,6 +105,8 @@ namespace BinaryFormatDataStructureTests
 #pragma warning restore IDE0044 // Add readonly modifier
 
             public decimal Three { get { return 0; } set { } }
+
+            private decimal _three = decimal.MaxValue;
         }
 
         private enum TestEnum

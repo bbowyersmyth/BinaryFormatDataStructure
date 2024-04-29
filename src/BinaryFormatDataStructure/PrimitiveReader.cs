@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization;
 
@@ -61,7 +62,7 @@ namespace BinaryFormatDataStructure
                     return reader.ReadUInt64();
 
                 case PrimitiveType.Decimal:
-                    return reader.ReadDecimal();
+                    return decimal.Parse(reader.ReadString(), CultureInfo.InvariantCulture);
 
                 case PrimitiveType.TimeSpan:
                     return ReadTimeSpan(reader);

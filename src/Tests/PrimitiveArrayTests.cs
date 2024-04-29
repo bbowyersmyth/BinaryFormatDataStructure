@@ -30,6 +30,26 @@ namespace BinaryFormatDataStructureTests
         }
 
         [TestMethod]
+        public void TestDecimalArray()
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            MemoryStream ms = new MemoryStream();
+
+            formatter.Serialize(ms, new decimal[] { 1.1m, 2.2m, 3.3m });
+            ms.Position = 0;
+
+            object result = NRBFReader.ReadStream(ms);
+
+            Assert.IsInstanceOfType(result, typeof(decimal[]));
+
+            decimal[] arrayResult = (decimal[])result;
+            Assert.AreEqual(3, arrayResult.Length);
+            Assert.AreEqual(1.1m, arrayResult[0]);
+            Assert.AreEqual(2.2m, arrayResult[1]);
+            Assert.AreEqual(3.3m, arrayResult[2]);
+        }
+
+        [TestMethod]
         public void TestTimeSpanArray()
         {
             BinaryFormatter formatter = new BinaryFormatter();
